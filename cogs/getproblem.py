@@ -109,13 +109,13 @@ class numcog(commands.Cog, name="numCommanding"):
     async def 백준유저검색(self, ctx, *informations):
         """;boj 백준핸들"""
         for info in informations:
-            user_info = requests.get(boj_api_server_user + info).json()["result"]["user"][0]
+            user_info = requests.get(boj_api_server_user + info).json()
             lv = boj_rating_to_lv(user_info["rating"])
             em = discord.Embed(title=info, color=boj_colorselect(lv), url="https://solved.ac/profile/" + info)
             em.set_thumbnail(url=boj_levels[lv])
-            em.add_field(name="**solved**", value=user_info["solved"], inline=1)
+            em.add_field(name="**solved**", value=user_info["solvedCount"], inline=1)
             em.add_field(name="**AC rating**", value= user_info["rating"], inline=1)
-            em.add_field(name="**class**", value= f"{user_info['class']}{'+'*user_info['class_decoration']}", inline=1)
+            em.add_field(name="**class**", value= f"{user_info['class']}{'+'*user_info['classDecoration']}", inline=1)
             await ctx.send(embed=em)
     
     @commands.command(aliases=["s","S","ㄴ","search"])
