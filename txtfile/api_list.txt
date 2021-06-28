@@ -1,0 +1,3 @@
+https://api.solved.ac/v2/problems/show.json?id=
+https://api.solved.ac/v2/users/show.json?id=
+https://solved.ac/search?query=
