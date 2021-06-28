@@ -2,7 +2,6 @@ import os
 import discord
 from discord.ext import commands
 import requests
-import bs4
 import datetime 
 from dateutil import tz
 import chardet
@@ -124,16 +123,13 @@ class numcog(commands.Cog, name="numCommanding"):
         server_search = boj_api_server_search
         for information in informations:
             server_search += f" {information}"
-        search_response = requests.get(server_search)
-        soup = bs4.BeautifulSoup(search_response.text, "html.parser")
-        nums = [i['href'].replace('https://www.acmicpc.net/problem/', "") for i in soup.select('a[class=hover_underline]')]
-        for num in nums[:3]:
-            problem_info = requests.get(boj_api_server_problem+num).json()["result"]["problems"][0]
-            em = discord.Embed(title = num + "번: " + problem_info["title"], color=boj_colorselect(problem_info["level"]),
+        search_result = requests.get(server_search)
+        for pro in search_result[:3]:
+            em = discord.Embed(title = pro['problemId'] + "번: " + pro['titleKo'], color=boj_colorselect(pro["level"]),
                                url="https://www.acmicpc.net/problem/"+num)
-            em.set_thumbnail(url=boj_levels[problem_info["level"]])
-            em.add_field(name="solved", value= problem_info["solved_count"], inline=1)
-            em.add_field(name="average try", value="%0.2f" % problem_info["average_try"], inline=1)
+            em.set_thumbnail(url=boj_levels[pro["level"]])
+            em.add_field(name="solved", value= pro['acceptedUserCount'], inline=1)
+            em.add_field(name="average try", value="%0.2f" % pro['averageTries'], inline=1)
             await ctx.send(embed=em)
     @commands.command(aliases=["c", "C", "ㅊ", "contest"])
     async def 코포컨테스트(self, ctx):
