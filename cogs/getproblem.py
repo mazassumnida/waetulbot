@@ -55,6 +55,12 @@ def boj_rating_to_lv(rating):
     if rating < 3000: return (rating-2800) // 50 + 27
     return 31
 
+def boj_class_deco(deco):
+    if deco == "gold":return 2
+    elif deco == "silver": return 1
+    return 0
+
+
 
 def cf_dateconvert(s):
     return datetime.datetime.utcfromtimestamp(s).replace(tzinfo=from_zone).astimezone(to_zone)
@@ -114,7 +120,7 @@ class numcog(commands.Cog, name="numCommanding"):
             em.set_thumbnail(url=boj_levels[lv])
             em.add_field(name="**solved**", value=user_info["solvedCount"], inline=1)
             em.add_field(name="**AC rating**", value= user_info["rating"], inline=1)
-            em.add_field(name="**class**", value= f"{user_info['class']}{'+'*user_info['classDecoration']}", inline=1)
+            em.add_field(name="**class**", value= f"{user_info['class']}{'+'*boj_class_deco(user_info['classDecoration'])}", inline=1)
             await ctx.send(embed=em)
     
     @commands.command(aliases=["s","S","ㄴ","search"])
