@@ -1,4 +1,4 @@
-
+import os
 import discord
 from discord.ext import commands
 import requests
@@ -7,13 +7,8 @@ import datetime
 from dateutil import tz
 import chardet
 
-with open(r"txtfile/api_list.txt", "r") as f_L:
-    api_list = f_L.readlines()
-    api_list = list(map(lambda s: s.strip(), api_list))
-
-boj_api_server_problem = api_list[0]
-boj_api_server_user = api_list[1]
-boj_api_server_search = api_list[2]
+boj_api_server_user = os.environ["boj_user"]
+boj_api_server_search = os.environ["boj_problem"]
 
 with open(r"txtfile/boj_levels.txt", "r") as f_L:
     boj_levels = f_L.readlines()
@@ -109,18 +104,7 @@ def cf_colorselect(rating):
 class numcog(commands.Cog, name="numCommanding"):
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.command(aliases=["p", "P", "problem", "ㅔ"])
-    async def 백준문제번호검색(self, ctx, *nums):
-        """;p 백준문제번호"""
-        for num in nums:
-            problem_info = requests.get(boj_api_server_problem+num).json()["result"]["problems"][0]
-            em = discord.Embed(title=num + "번: "+problem_info["title"], color=boj_colorselect(problem_info["level"]),
-                               url="https://www.acmicpc.net/problem/"+num)
-            em.set_thumbnail(url=boj_levels[problem_info["level"]])
-            em.add_field(name="solved", value= problem_info["solved_count"], inline=1)
-            em.add_field(name="average try", value= "%0.2f" % problem_info["average_try"], inline=1)
-            await ctx.send(embed=em)
+
     @commands.command(aliases=["bu", "BU", "ㅠㅕ", "buser", "boj", "BOJ", "ㅠㅐㅓ"])
     async def 백준유저검색(self, ctx, *informations):
         """;boj 백준핸들"""
@@ -152,7 +136,7 @@ class numcog(commands.Cog, name="numCommanding"):
             em.add_field(name="average try", value="%0.2f" % problem_info["average_try"], inline=1)
             await ctx.send(embed=em)
     @commands.command(aliases=["c", "C", "ㅊ", "contest"])
-    async def 열릴컨테스트(self, ctx):
+    async def 코포컨테스트(self, ctx):
         """;contest"""
         em = discord.Embed(title="Contest List", color=0, url=r"https://codeforces.com/contests")
         now = datetime.datetime.utcnow().replace(tzinfo=from_zone).astimezone(to_zone)
