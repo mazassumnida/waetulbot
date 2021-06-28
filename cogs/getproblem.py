@@ -132,7 +132,7 @@ class numcog(commands.Cog, name="numCommanding"):
         search_result = requests.get(server_search).json()["items"]
         for pro in search_result[:3]:
             em = discord.Embed(title = f"pro['problemId']번: pro['titleKo']", color=boj_colorselect(pro["level"]),
-                               url="https://www.acmicpc.net/problem/"+pro['problemId'])
+                               url=f"https://www.acmicpc.net/problem/{pro['problemId']}")
             em.set_thumbnail(url=boj_levels[pro["level"]])
             em.add_field(name="solved", value= pro['acceptedUserCount'], inline=1)
             em.add_field(name="average try", value="%0.2f" % pro['averageTries'], inline=1)
