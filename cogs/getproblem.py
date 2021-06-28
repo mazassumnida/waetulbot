@@ -129,7 +129,7 @@ class numcog(commands.Cog, name="numCommanding"):
         server_search = boj_api_server_search
         for information in informations:
             server_search += f" {information}"
-        search_result = requests.get(server_search)
+        search_result = requests.get(server_search).json()["items"]
         for pro in search_result[:3]:
             em = discord.Embed(title = pro['problemId'] + "번: " + pro['titleKo'], color=boj_colorselect(pro["level"]),
                                url="https://www.acmicpc.net/problem/"+pro['problemId'])
